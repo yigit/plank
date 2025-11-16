@@ -25,6 +25,7 @@ public enum GenerationParameterType {
     case javaDecorations
     case javaUnknownPropertyLogging
     case javaURIType
+    case objcDecorations
 }
 
 // Most of these are derived from https://www.binpress.com/tutorial/objective-c-reserved-keywords/43
@@ -362,7 +363,11 @@ extension FileRenderer {
                 fatalError("Bad reference found in schema for class: \(className)")
             }
         case let .object(schemaRoot):
-            return [schemaRoot.className(with: self.params)]
+            if schemaRoot.external {
+                return []
+            } else {
+                return [schemaRoot.className(with: self.params)]
+            }
         case let .map(valueType: .some(valueType)):
             return referencedClassNames(schema: valueType)
         case let .array(itemType: .some(itemType)), let .set(itemType: .some(itemType)):
@@ -516,10 +521,12 @@ public func generateFiles(urls: Set<URL>, outputDirectory: URL, generationParame
             assert(!objectRoots.isEmpty, "Incorrect Schema for root.") // TODO: Better error message.
 
             objectRoots.forEach { rootObject in
-                fileGenerators.forEach { generator in
-                    generator.generateFile(rootObject,
-                                           outputDirectory: outputDirectory,
-                                           generationParameters: generationParameters)
+                if !rootObject.external {
+                    fileGenerators.forEach { generator in
+                        generator.generateFile(rootObject,
+                                               outputDirectory: outputDirectory,
+                                               generationParameters: generationParameters)
+                    }
                 }
             }
         }

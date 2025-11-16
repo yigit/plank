@@ -8,15 +8,25 @@
 
 import Foundation
 
-let rootNSObject = SchemaObjectRoot(name: "NSObject", properties: [:], extends: nil, algebraicTypeIdentifier: nil)
+let rootNSObject = SchemaObjectRoot(name: "NSObject", properties: [:], extends: nil, algebraicTypeIdentifier: nil, external: true)
 
 public struct ObjCModelRenderer: ObjCFileRenderer {
     let rootSchema: SchemaObjectRoot
     let params: GenerationParameters
+    let decorations: ObjCDecorations
 
     init(rootSchema: SchemaObjectRoot, params: GenerationParameters) {
         self.rootSchema = rootSchema
         self.params = params
+        if let decorationsFile = self.params[.objcDecorations] {
+            do {
+                decorations = try JSONDecoder().decode(ObjCDecorations.self, from: Data(contentsOf: URL(fileURLWithPath: decorationsFile)))
+            } catch {
+                fatalError("Unable to parse custom ObjC decorations file with error: \(error)")
+            }
+        } else {
+            decorations = ObjCDecorations()
+        }
     }
 
     var dirtyPropertyOptionName: String {
@@ -216,6 +226,12 @@ public struct ObjCModelRenderer: ObjCFileRenderer {
             }
         }
 
+        let decorationImports = [
+            ObjCIR.Root.swiftPackageImports(
+                packageNames: Set(self.decorations.swiftPackageImports ?? [])
+            )
+        ] as [ObjCIR.Root]
+
         return [
             ObjCIR.Root.imports(
                 classNames: Set(self.renderReferencedClasses().map {
@@ -227,7 +243,7 @@ public struct ObjCModelRenderer: ObjCFileRenderer {
                 myName: self.className,
                 parentName: parentName
             ),
-        ] + adtRoots + enumRoots + [
+        ] + decorationImports + adtRoots + enumRoots + [
             ObjCIR.Root.structDecl(name: self.dirtyPropertyOptionName,
                                    fields: rootSchema.properties.keys
                                        .map { "unsigned int \(dirtyPropertyOption(propertyName: $0, className: self.className)):1;" }),

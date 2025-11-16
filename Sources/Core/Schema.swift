@@ -136,6 +136,7 @@ public struct SchemaObjectRoot: Hashable {
     let properties: [String: SchemaObjectProperty]
     let extends: URLSchemaReference?
     let algebraicTypeIdentifier: String?
+    let external: Bool
 
     var typeIdentifier: String {
         return algebraicTypeIdentifier ?? name
@@ -325,6 +326,19 @@ extension Schema {
                     }))
                 }
             case JSONType.object:
+                if let external = propertyInfo["x-external"] as? Bool, external {
+                    let xTypeName = propertyInfo["x-typename"] as? String
+                    if (xTypeName == nil) {
+                        fatalError("Must provide an x-typename for external reference to \(propertyInfo)")
+                    }
+                    return Schema.object(SchemaObjectRoot(
+                        name: xTypeName!,
+                        properties: [:],
+                        extends: nil,
+                        algebraicTypeIdentifier: nil,
+                        external: true
+                    ))
+                }
                 let requiredProps = Set(propertyInfo["required"] as? [String] ?? [])
                 if let propMap = propertyInfo["properties"] as? JSONObject, let objectTitle = title {
                     // Class
@@ -354,7 +368,8 @@ extension Schema {
                     return lifted.map { Schema.object(SchemaObjectRoot(name: objectTitle,
                                                                        properties: Dictionary(elements: $0),
                                                                        extends: extends,
-                                                                       algebraicTypeIdentifier: propertyInfo["algebraicDataTypeIdentifier"] as? String)) }
+                                                                       algebraicTypeIdentifier: propertyInfo["algebraicDataTypeIdentifier"] as? String,
+                                                                       external: false)) }
                 } else {
                     // Map type
                     return Schema.map(valueType: (propertyInfo["additionalProperties"] as? JSONObject)

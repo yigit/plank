@@ -31,7 +31,8 @@ extension ObjCModelRenderer {
         let root = SchemaObjectRoot(name: adtName,
                                     properties: properties,
                                     extends: nil,
-                                    algebraicTypeIdentifier: nil)
+                                    algebraicTypeIdentifier: nil,
+                                    external: false)
         return ObjCADTRenderer(rootSchema: root,
                                params: params,
                                dataTypes: schemas).renderRoots()

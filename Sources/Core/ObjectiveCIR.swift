@@ -32,6 +32,14 @@ public enum ObjCPrimitiveType: String {
     case boolean = "BOOL"
 }
 
+//
+// The json file passed in via objc_decorations=model_decorations.json is deserialized into this.
+//
+struct ObjCDecorations: Codable {
+    // import these packages into the generated implementation file.
+    var swiftPackageImports: [String]?
+}
+
 extension String {
     // Objective-C String Literal
     func objcLiteral() -> String {
@@ -136,6 +144,10 @@ enum EnumerationIntegralType: String {
 
 extension SchemaObjectRoot {
     func className(with params: GenerationParameters) -> String {
+        guard !external else {
+            // use the given name if set by the schema.
+            return name
+        }
         if let classPrefix = params[GenerationParameterType.classPrefix] as String? {
             return "\(classPrefix)\(Languages.objectiveC.snakeCaseToCamelCase(name))"
         } else {
@@ -335,6 +347,7 @@ public struct ObjCIR {
     enum Root: RootRenderer {
         case structDecl(name: String, fields: [String])
         case imports(classNames: Set<String>, myName: String, parentName: String?)
+        case swiftPackageImports(packageNames: Set<String>)
         case category(className: String, categoryName: String?, methods: [ObjCIR.Method],
                       properties: [SimpleProperty],
                       variables: [(Parameter, TypeName)])
@@ -365,6 +378,8 @@ public struct ObjCIR {
                     "#import \"\(ObjCRuntimeHeaderFile().fileName)\"",
                 ].filter { $0 != "" } + (["\(myName)Builder"] + classNames)
                     .sorted().map { "@class \($0.trimmingCharacters(in: .whitespaces));" }
+            case .swiftPackageImports(let packageNames):
+                return packageNames.map { "@import \($0);" }
             case let .classDecl(className, extends, methods, properties, protocols):
                 let protocolList = protocols.keys.sorted().joined(separator: ", ")
                 let protocolDeclarations = !protocols.isEmpty ? "<\(protocolList)>" : ""
@@ -429,6 +444,8 @@ public struct ObjCIR {
                     .map { $0.trimmingCharacters(in: .whitespaces) }
                     .map { ObjCIR.fileImportStmt($0, headerPrefix: params[GenerationParameterType.headerPrefix]) }
                     .joined(separator: "\n")]
+            case .swiftPackageImports(let packageNames):
+                return packageNames.map { "@import \($0);" }
             case .classDecl(name: let className, extends: _, methods: let methods, properties: _, protocols: let protocols):
                 return [
                     "@implementation \(className)",

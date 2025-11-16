@@ -17,6 +17,7 @@ enum FlagOptions: String {
     case outputDirectory = "output_dir"
     case objectiveCClassPrefix = "objc_class_prefix"
     case objectiveCHeaderPrefix = "objc_header_prefix"
+    case objectiveCDecorations = "objc_decorations"
     case javaPackageName = "java_package_name"
     case javaNullabilityAnnotationType = "java_nullability_annotation_type"
     case javaGeneratePackagePrivateSetters = "java_generate_package_private_setters_beta"
@@ -37,6 +38,7 @@ enum FlagOptions: String {
         case .outputDirectory: return true
         case .objectiveCClassPrefix: return true
         case .objectiveCHeaderPrefix: return true
+        case .objectiveCDecorations: return true
         case .indent: return true
         case .printDeps: return false
         case .noRecursive: return false
@@ -71,6 +73,7 @@ extension FlagOptions: HelpCommandOutput {
             "    Objective-C:",
             "    --\(FlagOptions.objectiveCClassPrefix.rawValue) - The prefix to add to all generated class names",
             "    --\(FlagOptions.objectiveCHeaderPrefix.rawValue) - The prefix to add before all generated header includes",
+            "    --\(FlagOptions.objectiveCDecorations.rawValue) - Custom decorations to apply to the generated Objective-C model",
             "",
             "    Java:",
             "    --\(FlagOptions.javaPackageName.rawValue) - The package name to associate with generated Java sources",
@@ -160,6 +163,7 @@ func handleGenerateCommand(withArguments arguments: [String]) {
     let recursive: String? = (flags[.noRecursive] == nil) ? .some("") : .none
     let classPrefix: String? = flags[.objectiveCClassPrefix]
     let headerPrefix: String? = flags[.objectiveCHeaderPrefix]
+    let objCDecorations: String? = flags[.objectiveCDecorations]
     let includeRuntime: String? = flags[.onlyRuntime] != nil || (flags[.noRuntime] == nil || flags[.noRecursive] != nil) ? .some("") : .none
     let indent: String? = flags[.indent]
     let packageName: String? = flags[.javaPackageName]
@@ -181,6 +185,7 @@ func handleGenerateCommand(withArguments arguments: [String]) {
         (.javaDecorations, javaDecorations),
         (.javaUnknownPropertyLogging, javaUnknownPropertyLogging),
         (.javaURIType, javaURIType),
+        (.objcDecorations, objCDecorations),
     ].reduce([:]) { (dict: GenerationParameters, tuple: (GenerationParameterType, String?)) in
         var mutableDict = dict
         if let val = tuple.1 {
