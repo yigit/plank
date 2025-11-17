@@ -37,7 +37,8 @@ class ObjectiveCInitTests: XCTestCase {
                 name: "request",
                 properties: ["response_data": SchemaObjectProperty(schema: prop, nullability: .nullable)],
                 extends: nil,
-                algebraicTypeIdentifier: nil
+                algebraicTypeIdentifier: nil,
+                external: false
             )
 
             let renderer = ObjCModelRenderer(rootSchema: schema, params: [:])

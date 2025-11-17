@@ -1,11 +1,17 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-# Apple platform dependencies
+# Swift rules (must come before Apple rules)
+http_archive(
+    name = "build_bazel_rules_swift",
+    sha256 = "28a66ff5d97500f0304f4e8945d936fe0584e0d5b7a6f83258298007a93190ba",
+    url = "https://github.com/bazelbuild/rules_swift/releases/download/1.13.0/rules_swift.1.13.0.tar.gz",
+)
 
+# Apple platform dependencies
 http_archive(
     name = "build_bazel_rules_apple",
-    sha256 = "0052d452af7742c8f3a4e0929763388a66403de363775db7e90adecb2ba4944b",
-    url = "https://github.com/bazelbuild/rules_apple/releases/download/0.31.3/rules_apple.0.31.3.tar.gz",
+    sha256 = "34c41bfb59cdaea29ac2df5a2fa79e5add609c71bb303b2ebb10985f93fa20e7",
+    url = "https://github.com/bazelbuild/rules_apple/releases/download/3.1.1/rules_apple.3.1.1.tar.gz",
 )
 
 load(
@@ -37,9 +43,8 @@ load(
 apple_support_dependencies()
 
 # Java / Android dependencies
-
-RULES_JVM_EXTERNAL_TAG = "3.3"
-RULES_JVM_EXTERNAL_SHA = "d85951a92c0908c80bd8551002d66cb23c3434409c814179c0ff026b53544dab"
+RULES_JVM_EXTERNAL_TAG = "4.5"
+RULES_JVM_EXTERNAL_SHA = "b17d7388feb9bfa7f2fa09031b32707df529f26c91ab9e5d909eb1676badd9a6"
 
 http_archive(
     name = "rules_jvm_external",
@@ -57,9 +62,8 @@ maven_install(
         "androidx.annotation:annotation:1.0.2",
     ],
     repositories = [
-        "https://jcenter.bintray.com/",
-        "https://maven.google.com",
         "https://repo1.maven.org/maven2",
+        "https://maven.google.com",
     ],
 )
 

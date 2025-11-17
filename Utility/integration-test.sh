@@ -38,5 +38,7 @@ if [ -x "$(command -v flow)" ]; then
 fi
 
 if [ -n "${ANDROID_HOME}" ]; then
-  python tools/bazel build //Examples/Java:example --verbose_failures
+  bazelisk build //Examples/Java:example --verbose_failures
+else
+  echo "Skipping Android build, ANDROID_HOME is not set"
 fi
