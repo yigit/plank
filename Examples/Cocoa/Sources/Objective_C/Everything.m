@@ -836,15 +836,15 @@ extern EverythingStringEnum EverythingStringEnumFromString(NSString * _Nonnull s
             self->_everythingDirtyProperties.EverythingDirtyPropertyListWithListAndOtherModelValues = 1;
             if (value != (id)kCFNull) {
                 if (!error || [value isKindOfClass:[NSArray class]]) {
-                    NSArray *items = value;
-                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items.count];
-                    for (id obj0 in items) {
+                    NSArray *items0 = value;
+                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items0.count];
+                    for (id obj0 in items0) {
                         if (obj0 != (id)kCFNull) {
                             id tmp0 = nil;
                             if (!error || [obj0 isKindOfClass:[NSArray class]]) {
-                                NSArray *items = obj0;
-                                NSMutableArray *result1 = [NSMutableArray arrayWithCapacity:items.count];
-                                for (id obj1 in items) {
+                                NSArray *items1 = obj0;
+                                NSMutableArray *result1 = [NSMutableArray arrayWithCapacity:items1.count];
+                                for (id obj1 in items1) {
                                     if (obj1 != (id)kCFNull) {
                                         id tmp1 = nil;
                                         if (!error || [obj1 isKindOfClass:[NSDictionary class]]) {
@@ -880,9 +880,9 @@ extern EverythingStringEnum EverythingStringEnumFromString(NSString * _Nonnull s
             self->_everythingDirtyProperties.EverythingDirtyPropertyListWithMapAndOtherModelValues = 1;
             if (value != (id)kCFNull) {
                 if (!error || [value isKindOfClass:[NSArray class]]) {
-                    NSArray *items = value;
-                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items.count];
-                    for (id obj0 in items) {
+                    NSArray *items0 = value;
+                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items0.count];
+                    for (id obj0 in items0) {
                         if (obj0 != (id)kCFNull) {
                             id tmp0 = nil;
                             if (!error || [obj0 isKindOfClass:[NSDictionary class]]) {
@@ -920,9 +920,9 @@ extern EverythingStringEnum EverythingStringEnumFromString(NSString * _Nonnull s
             self->_everythingDirtyProperties.EverythingDirtyPropertyListWithObjectValues = 1;
             if (value != (id)kCFNull) {
                 if (!error || [value isKindOfClass:[NSArray class]]) {
-                    NSArray *items = value;
-                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items.count];
-                    for (id obj0 in items) {
+                    NSArray *items0 = value;
+                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items0.count];
+                    for (id obj0 in items0) {
                         if (obj0 != (id)kCFNull) {
                             id tmp0 = nil;
                             if (!error || [obj0 isKindOfClass:[NSString class]]) {
@@ -949,9 +949,9 @@ extern EverythingStringEnum EverythingStringEnumFromString(NSString * _Nonnull s
             self->_everythingDirtyProperties.EverythingDirtyPropertyListWithOtherModelValues = 1;
             if (value != (id)kCFNull) {
                 if (!error || [value isKindOfClass:[NSArray class]]) {
-                    NSArray *items = value;
-                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items.count];
-                    for (id obj0 in items) {
+                    NSArray *items0 = value;
+                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items0.count];
+                    for (id obj0 in items0) {
                         if (obj0 != (id)kCFNull) {
                             id tmp0 = nil;
                             if (!error || [obj0 isKindOfClass:[NSDictionary class]]) {
@@ -1052,9 +1052,9 @@ extern EverythingStringEnum EverythingStringEnumFromString(NSString * _Nonnull s
                     [items0 enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key0, id  _Nonnull obj0, __unused BOOL * _Nonnull stop0){
                         if (obj0 != nil && obj0 != (id)kCFNull) {
                             if (!error || [obj0 isKindOfClass:[NSArray class]]) {
-                                NSArray *items = obj0;
-                                NSMutableArray *result1 = [NSMutableArray arrayWithCapacity:items.count];
-                                for (id obj1 in items) {
+                                NSArray *items1 = obj0;
+                                NSMutableArray *result1 = [NSMutableArray arrayWithCapacity:items1.count];
+                                for (id obj1 in items1) {
                                     if (obj1 != (id)kCFNull) {
                                         id tmp1 = nil;
                                         if (!error || [obj1 isKindOfClass:[NSDictionary class]]) {
@@ -1312,9 +1312,9 @@ extern EverythingStringEnum EverythingStringEnumFromString(NSString * _Nonnull s
             self->_everythingDirtyProperties.EverythingDirtyPropertySetPropWithOtherModelValues = 1;
             if (value != (id)kCFNull) {
                 if (!error || [value isKindOfClass:[NSArray class]]) {
-                    NSArray *items = value;
-                    NSMutableSet *result0 = [NSMutableSet setWithCapacity:items.count];
-                    for (id obj0 in items) {
+                    NSArray *items0 = value;
+                    NSMutableSet *result0 = [NSMutableSet setWithCapacity:items0.count];
+                    for (id obj0 in items0) {
                         if (obj0 != (id)kCFNull) {
                             id tmp0 = nil;
                             if (!error || [obj0 isKindOfClass:[NSDictionary class]]) {
@@ -1341,8 +1341,8 @@ extern EverythingStringEnum EverythingStringEnumFromString(NSString * _Nonnull s
             self->_everythingDirtyProperties.EverythingDirtyPropertySetPropWithPrimitiveValues = 1;
             if (value != (id)kCFNull) {
                 if (!error || [value isKindOfClass:[NSArray class]]) {
-                    NSArray *items = value;
-                    self->_setPropWithPrimitiveValues = [NSSet setWithArray:items];
+                    NSArray *items0 = value;
+                    self->_setPropWithPrimitiveValues = [NSSet setWithArray:items0];
                 } else {
                     self->_everythingDirtyProperties.EverythingDirtyPropertySetPropWithPrimitiveValues = 0;
                     *error = PlankTypeError(@"set_prop_with_primitive_values", [NSArray class], [value class]);
@@ -1356,9 +1356,9 @@ extern EverythingStringEnum EverythingStringEnumFromString(NSString * _Nonnull s
             self->_everythingDirtyProperties.EverythingDirtyPropertySetPropWithValues = 1;
             if (value != (id)kCFNull) {
                 if (!error || [value isKindOfClass:[NSArray class]]) {
-                    NSArray *items = value;
-                    NSMutableSet *result0 = [NSMutableSet setWithCapacity:items.count];
-                    for (id obj0 in items) {
+                    NSArray *items0 = value;
+                    NSMutableSet *result0 = [NSMutableSet setWithCapacity:items0.count];
+                    for (id obj0 in items0) {
                         if (obj0 != (id)kCFNull) {
                             id tmp0 = nil;
                             if (!error || [obj0 isKindOfClass:[NSString class]]) {

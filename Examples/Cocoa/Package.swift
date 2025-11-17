@@ -4,8 +4,14 @@ import PackageDescription
 
 let package = Package(
     name: "Objective_C",
+    dependencies: [
+        .package(path: "../MyCustomPackage")
+    ],
     targets: [
-        .target(name: "Objective_C"),
+        .target(
+            name: "Objective_C",
+            dependencies: ["MyCustomPackage"]
+        ),
         .testTarget(name: "Objective_CTests", dependencies: ["Objective_C"]),
     ]
 )

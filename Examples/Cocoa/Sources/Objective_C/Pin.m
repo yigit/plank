@@ -220,9 +220,9 @@ struct PinDirtyProperties {
             self->_pinDirtyProperties.PinDirtyPropertyAttributionObjects = 1;
             if (value != (id)kCFNull) {
                 if (!error || [value isKindOfClass:[NSArray class]]) {
-                    NSArray *items = value;
-                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items.count];
-                    for (id obj0 in items) {
+                    NSArray *items0 = value;
+                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items0.count];
+                    for (id obj0 in items0) {
                         if (obj0 != (id)kCFNull) {
                             id tmp0 = nil;
                             if ([obj0 isKindOfClass:[NSDictionary class]] && [obj0[@"type"] isEqualToString:@"board"]) {
@@ -440,9 +440,9 @@ struct PinDirtyProperties {
             self->_pinDirtyProperties.PinDirtyPropertyTags = 1;
             if (value != (id)kCFNull) {
                 if (!error || [value isKindOfClass:[NSArray class]]) {
-                    NSArray *items = value;
-                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items.count];
-                    for (id obj0 in items) {
+                    NSArray *items0 = value;
+                    NSMutableArray *result0 = [NSMutableArray arrayWithCapacity:items0.count];
+                    for (id obj0 in items0) {
                         if (obj0 != (id)kCFNull) {
                             id tmp0 = nil;
                             if (!error || [obj0 isKindOfClass:[NSDictionary class]]) {

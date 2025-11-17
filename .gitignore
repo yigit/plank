@@ -41,3 +41,4 @@ docs/_site
 .bazel/
 bazel-out/
 bazel-out
+.vscode

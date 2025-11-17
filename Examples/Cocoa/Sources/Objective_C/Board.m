@@ -69,9 +69,9 @@ struct BoardDirtyProperties {
             self->_boardDirtyProperties.BoardDirtyPropertyContributors = 1;
             if (value != (id)kCFNull) {
                 if (!error || [value isKindOfClass:[NSArray class]]) {
-                    NSArray *items = value;
-                    NSMutableSet *result0 = [NSMutableSet setWithCapacity:items.count];
-                    for (id obj0 in items) {
+                    NSArray *items0 = value;
+                    NSMutableSet *result0 = [NSMutableSet setWithCapacity:items0.count];
+                    for (id obj0 in items0) {
                         if (obj0 != (id)kCFNull) {
                             id tmp0 = nil;
                             if (!error || [obj0 isKindOfClass:[NSDictionary class]]) {

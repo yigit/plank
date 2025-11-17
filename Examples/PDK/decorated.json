@@ -1,0 +1,15 @@
+{
+    "id": "decorated.json",
+    "title": "decorated",
+    "description" : "Schema definition of a decorated type",
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "name" : { "type": "string" },
+        "externalType": {
+            "type": "object",
+            "x-external": true,
+            "x-typename": "MyCustomClass"
+        }
+    }
+}
