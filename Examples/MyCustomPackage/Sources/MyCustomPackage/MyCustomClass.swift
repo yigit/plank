@@ -1,11 +1,17 @@
 import Foundation
-
+// An example of a class that can be referenced from the Plank models.
+// This class implements the bare minimum of required methods.
 @objc
 @objcMembers
-public class MyCustomClass: NSObject, NSCoding {
+public class MyCustomClass: NSObject, NSSecureCoding {
     public var name: String
     public var value: NSNumber
     
+    // NSSecureCoding requirement
+    public static var supportsSecureCoding: Bool {
+        return true
+    }
+
     // Standard initializer
     public required init(name: String, value: NSNumber) {
         self.name = name
@@ -58,10 +64,10 @@ public class MyCustomClass: NSObject, NSCoding {
         coder.encode(value, forKey: "value")
     }
     
-    // NSCoding - decode
+    // NSSecureCoding - decode
     public required init?(coder: NSCoder) {
-        guard let name = coder.decodeObject(forKey: "name") as? String,
-              let value = coder.decodeObject(forKey: "value") as? NSNumber else {
+        guard let name = coder.decodeObject(of: NSString.self, forKey: "name") as String?,
+              let value = coder.decodeObject(of: NSNumber.self, forKey: "value") else {
             return nil
         }
         self.name = name

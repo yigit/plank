@@ -579,3 +579,51 @@ class ObjcDictionaryRepresentationTestSuite: XCTestCase {
         assertDictionaryRepresentation(list)
     }
 }
+
+class ObjCCustomTypeDeserializationTestSuite: XCTestCase {
+    func testDictionaryRepresentation() {
+        let input = [
+            "name": "decorated_name",
+            "externalType": [
+                "name": "external_type_name",
+                "value": 41
+            ]
+        ] as [String : Any]
+        let decorated = Decorated(modelDictionary: input)
+        let dictRepresentation = decorated.dictionaryObjectRepresentation()
+
+        XCTAssert(input as JSONDict == dictRepresentation, """
+            Dictionary representation should be the same as the model dictionary.
+            Expected:
+            \(input)
+
+            Actual:
+            \(dictRepresentation)
+        """)
+    }
+    func testEncodeDecode() {
+        let input = [
+            "name": "decorated_name",
+            "externalType": [
+                "name": "external_type_name",
+                "value": 41
+            ]
+        ] as [String : Any]
+        let decorated = Decorated(modelDictionary: input)
+        let encodedData = try! NSKeyedArchiver.archivedData(withRootObject: decorated, requiringSecureCoding: false)
+        let decoded = try! NSKeyedUnarchiver.unarchivedObject(
+            ofClass: Decorated.self,
+            from: encodedData
+        )
+        let dictRepresentation = decoded!.dictionaryObjectRepresentation()
+
+        XCTAssert(input as JSONDict == dictRepresentation, """
+            Dictionary representation should be the same as the model dictionary.
+            Expected:
+            \(input)
+
+            Actual:
+            \(dictRepresentation)
+        """)
+    }
+}
