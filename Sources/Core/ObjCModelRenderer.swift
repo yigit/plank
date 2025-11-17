@@ -231,6 +231,13 @@ public struct ObjCModelRenderer: ObjCFileRenderer {
                 packageNames: Set(self.decorations.swiftPackageImports ?? [])
             )
         ] as [ObjCIR.Root]
+        let forwardClassDeclarationsForExternalTypes: [ObjCIR.Root] = [ObjCIR.Root.forwardClassDeclarations(classNames: Set(properties.compactMap { (_, prop) -> String? in
+            guard case let .object(schemaRoot) = prop.schema,
+                  schemaRoot.external else {
+                return nil
+            }
+            return schemaRoot.name
+        }))]
 
         return [
             ObjCIR.Root.imports(
@@ -243,7 +250,7 @@ public struct ObjCModelRenderer: ObjCFileRenderer {
                 myName: self.className,
                 parentName: parentName
             ),
-        ] + decorationImports + adtRoots + enumRoots + [
+        ] + decorationImports + forwardClassDeclarationsForExternalTypes + adtRoots + enumRoots + [
             ObjCIR.Root.structDecl(name: self.dirtyPropertyOptionName,
                                    fields: rootSchema.properties.keys
                                        .map { "unsigned int \(dirtyPropertyOption(propertyName: $0, className: self.className)):1;" }),

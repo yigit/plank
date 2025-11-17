@@ -347,6 +347,7 @@ public struct ObjCIR {
     enum Root: RootRenderer {
         case structDecl(name: String, fields: [String])
         case imports(classNames: Set<String>, myName: String, parentName: String?)
+        case forwardClassDeclarations(classNames: Set<String>)
         case swiftPackageImports(packageNames: Set<String>)
         case category(className: String, categoryName: String?, methods: [ObjCIR.Method],
                       properties: [SimpleProperty],
@@ -378,17 +379,17 @@ public struct ObjCIR {
                     "#import \"\(ObjCRuntimeHeaderFile().fileName)\"",
                 ].filter { $0 != "" } + (["\(myName)Builder"] + classNames)
                     .sorted().map { "@class \($0.trimmingCharacters(in: .whitespaces));" }
-            case .swiftPackageImports(let packageNames):
-                return packageNames.map { "@import \($0);" }
+            case .swiftPackageImports(_):
+                return []
+            case .forwardClassDeclarations(let classNames):
+                return classNames.sorted().map { "@class \($0);" }
             case let .classDecl(className, extends, methods, properties, protocols):
                 let protocolList = protocols.keys.sorted().joined(separator: ", ")
                 let protocolDeclarations = !protocols.isEmpty ? "<\(protocolList)>" : ""
                 let superClass = extends ?? "NSObject\(protocolDeclarations)"
-
                 let nullability = { (prop: SchemaObjectProperty) in
                     prop.nullability.map { "\($0), " } ?? ""
                 }
-
                 return [
                     "@interface \(className) : \(superClass)",
                     properties.sorted { $0.0 < $1.0 }.map { param, typeName, propSchema, access in
@@ -437,6 +438,9 @@ public struct ObjCIR {
                 ]
             case .macro:
                 // skip macro in impl
+                return []
+            case .forwardClassDeclarations:
+                // these are only declared in the objc headers
                 return []
             case .imports(let classNames, let myName, _):
                 return [classNames.union(Set([myName]))
