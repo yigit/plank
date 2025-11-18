@@ -231,13 +231,36 @@ public struct ObjCModelRenderer: ObjCFileRenderer {
                 packageNames: Set(self.decorations.swiftPackageImports ?? [])
             )
         ] as [ObjCIR.Root]
-        let forwardClassDeclarationsForExternalTypes: [ObjCIR.Root] = [ObjCIR.Root.forwardClassDeclarations(classNames: Set(properties.compactMap { (_, prop) -> String? in
-            guard case let .object(schemaRoot) = prop.schema,
-                  schemaRoot.external else {
-                return nil
+        func externalClassReferences(schema: Schema) -> [String] {
+            switch schema {
+            case let .oneOf(types: possibleTypes):
+                return possibleTypes.flatMap { typeSchema in externalClassReferences(schema: typeSchema) }
+            case let .array(itemType: .some(itemType)):
+                let subItems = externalClassReferences(schema: itemType)
+                if !subItems.isEmpty {
+                    fatalError("external class references in arrays are not supported yet");
+                }
+                return subItems
+            case let .map(valueType: .some(additionalProperties)):
+                let subItems = externalClassReferences(schema: additionalProperties)
+                if !subItems.isEmpty {
+                    fatalError("external class references in maps are not supported yet")
+                }
+                return subItems
+            case let .object(schemaObjectRoot):
+                if schemaObjectRoot.external {
+                    return [schemaObjectRoot.name]
+                } else {
+                    return []
+                }
+            default: return []
             }
-            return schemaRoot.name
-        }))]
+        }
+        let forwardClassDeclarationsForExternalTypes: [ObjCIR.Root] = [ObjCIR.Root.forwardClassDeclarations(classNames: Set(
+            properties.flatMap { (_, prop) -> [String] in
+                externalClassReferences(schema: prop.schema)
+            }
+        ))];
 
         return [
             ObjCIR.Root.imports(
